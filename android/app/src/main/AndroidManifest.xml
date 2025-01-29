@@ -26,6 +26,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
         <data android:scheme="com.dipantan.Keycloak"/>
+        <data android:scheme="keycloak"/>
       </intent-filter>
     </activity>
   </application>

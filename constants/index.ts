@@ -1,7 +1,7 @@
 import { RNKeycloak } from "@react-keycloak/native";
 
 export const keycloak = new RNKeycloak({
-  url: "http://localhost:8081/auth",
+  url: "http://192.168.1.2:8081",
   realm: "ems",
-  clientId: "admin",
+  clientId: "dipantan-ems",
 });

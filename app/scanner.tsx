@@ -1,19 +1,20 @@
 import React from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
-import QRCodeScanner from "react-native-qrcode-scanner";
-import { useStore } from "@/store";
+import { View, StyleSheet, Alert } from "react-native";
+import { useKeycloak } from "@react-keycloak/native";
+import { Camera, CameraType } from "react-native-camera-kit";
+import { OnReadCodeData } from "react-native-camera-kit/dist/CameraProps";
 
-export default function ScannerScreen() {
-  const { user } = useStore();
+export default function Scanner() {
+  const { keycloak } = useKeycloak();
 
-  const handleScanSuccess = async (e: { data: string }) => {
+  const handleScanSuccess = async (e: OnReadCodeData) => {
     try {
-      const payload = JSON.parse(e.data);
+      const payload = JSON.parse(e.nativeEvent.codeStringValue);
       const response = await fetch("https://192.168.1.4:3000/attendance", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${keycloak?.token}`,
         },
         body: JSON.stringify({ qrPayload: payload }),
       });
@@ -31,9 +32,11 @@ export default function ScannerScreen() {
 
   return (
     <View style={styles.container}>
-      <QRCodeScanner
-        onRead={handleScanSuccess}
-        topContent={<Text>Scan the QR Code to mark attendance</Text>}
+      <Camera
+        cameraType={CameraType.Back}
+        scanBarcode={true}
+        onReadCode={handleScanSuccess}
+        flashMode="on"
       />
     </View>
   );

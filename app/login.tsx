@@ -1,20 +1,16 @@
 import React from "react";
 import { View, Button, Text, StyleSheet } from "react-native";
-import { useStore } from "@/store";
-import { keycloak } from "@/constants";
-import { useRouter } from "expo-router";
+import { useKeycloak } from "@react-keycloak/native";
 
 export default function LoginScreen() {
-  const { setUser } = useStore();
-  const router = useRouter();
+  const { keycloak } = useKeycloak();
 
   const handleLogin = async () => {
     try {
-      const user = await keycloak.login();
-      if (user.token) {
-        setUser(user);
-        router.push("/dashboard");
-      }
+      keycloak?.login({
+        redirectUri: "keycloak://dashboard",
+        action: "register",
+      });
     } catch (error) {
       console.error("Login failed", error);
     }
